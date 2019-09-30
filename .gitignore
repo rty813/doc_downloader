@@ -1,0 +1,8 @@
+temp/
+dist/
+build/
+.vscode/
+__pycache__/
+*.pyc
+*.log
+book118/out/
