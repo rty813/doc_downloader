@@ -13,11 +13,10 @@ from tqdm import trange
 from img2pdf import conpdf
 
 
-def download(url, filename, debuggable):
+def download(url):
     option = webdriver.ChromeOptions()
     # option.add_argument('headless')
-    if not debuggable:
-        option.add_argument('log-level=3')
+    option.add_argument('log-level=3')
     driver = webdriver.Chrome(
         executable_path='.//chromedriver', chrome_options=option)
 
@@ -30,8 +29,6 @@ def download(url, filename, debuggable):
         print("Timeout - start download anyway.")
 
     print(f'道客巴巴: 《{title}》')
-    if filename != None:
-        title = filename
     time.sleep(5)
 
     try:
@@ -55,9 +52,6 @@ def download(url, filename, debuggable):
         # 缩放
         driver.find_element_by_id('zoomInButton').click()
         time.sleep(0.5)
-
-    if not os.path.exists('./temp'):
-        os.mkdir('./temp')
 
     if not os.path.exists(f'./temp/{title}'):
         os.mkdir(f'./temp/{title}')
@@ -88,7 +82,7 @@ def download(url, filename, debuggable):
 
         img_data = (img_data[22:]).encode()
 
-        with open(f"./temp/{title}/image{pages}.png", "wb") as fh:
+        with open(f"./temp/{title}/{pages}.png", "wb") as fh:
             fh.write(base64.decodebytes(img_data))
     driver.quit()
     print('下载完毕，正在转码')

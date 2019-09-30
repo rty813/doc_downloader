@@ -1,1 +1,0 @@
-java -jar -Dfile.encoding=utf-8 book118Downloader-V2019.jar

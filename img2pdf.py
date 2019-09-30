@@ -13,7 +13,7 @@ def file_name(file_dir, suffix=".jpg"):
         for file in files:
             if os.path.splitext(file)[1] == suffix:
                 L.append(os.path.join(root, file))
-    L = sorted(L, key=lambda x: int(x.split('\\')[-1][5:-4]))
+    L = sorted(L, key=lambda x: int(x.split('\\')[-1].split('/')[-1][:-4]))
     return L
 
 
@@ -55,7 +55,7 @@ def conpdf(f_pdf, filedir, suffix=".jpg"):
         c.drawImage(f, posx, posy, widthx, widthy)
         c.showPage()
     c.save()
-    print("转码成功")
+    print("转码完毕")
 
 
 if __name__ == "__main__":
