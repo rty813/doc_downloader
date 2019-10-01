@@ -9,6 +9,7 @@ import base64
 import time
 import sys
 import os
+import shutil
 from tqdm import trange
 from img2pdf import conpdf
 
@@ -53,12 +54,9 @@ def download(url):
         driver.find_element_by_id('zoomInButton').click()
         time.sleep(0.5)
 
-    if not os.path.exists(f'./temp/{title}'):
-        os.mkdir(f'./temp/{title}')
-    else:
-        ls = os.listdir(f'./temp/{title}')
-        for f in ls:
-            os.remove(f'./temp/{title}/' + f)
+    if os.path.exists(f'./temp/{title}'):
+        shutil.rmtree(f'./temp/{title}')
+    os.makedirs(f'./temp/{title}')
 
     for pages in trange(num_of_pages):
         time.sleep(0.5)
@@ -86,4 +84,4 @@ def download(url):
             fh.write(base64.decodebytes(img_data))
     driver.quit()
     print('下载完毕，正在转码')
-    conpdf(f'{title}.pdf', f'temp/{title}', '.png')
+    conpdf(f'output/{title}.pdf', f'temp/{title}', '.png')

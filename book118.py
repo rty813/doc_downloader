@@ -53,7 +53,7 @@ class Book118:
         self.__getIMG()
         # 生成pdf
         print('下载完毕，正在转码')
-        conpdf(f'{self.title}.pdf', f'temp/{self.title}/', '.jpg')
+        conpdf(f'output/{self.title}.pdf', f'temp/{self.title}/', '.jpg')
 
     def __getPdfInfo(self):
         url = makeURL('https://max.book118.com/index.php?',

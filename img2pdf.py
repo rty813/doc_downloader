@@ -17,14 +17,15 @@ def file_name(file_dir, suffix=".jpg"):
     return L
 
 
-def conpdf(f_pdf, filedir, suffix=".jpg"):
+def conpdf(f_pdf, filedir, suffix=".jpg", scale=False):
     fileList = file_name(filedir, suffix)
     img = Image.open(fileList[0])
-    # if img.size[0] > img.size[1]:
-    #     (w, h) = (940, 529)
-    # else:
-    #     (w, h) = (848, 1168)
-    (w, h) = img.size
+    if scale and img.size[0] < img.size[1]:
+        # (w, h) = (940, 529)
+        (w, h) = (848, 1168)
+    else:
+        (w, h) = img.size
+
     c = canvas.Canvas(f_pdf, pagesize=(w, h))
 
     for i in trange(len(fileList)):
