@@ -57,7 +57,11 @@ def main():
             break
         else:
             print('暂不支持')
-        insertDB(url)
+
+        try:
+            insertDB(url)
+        except Exception:
+            pass
 
 
 if __name__ == "__main__":
