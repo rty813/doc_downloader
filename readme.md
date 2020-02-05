@@ -6,6 +6,7 @@
 ## 使用方法
 ```
 1. 安装nodejs
-2. npm install -g svg2png
-3. python docDownloader.py
+2. 命令提示符内输入：npm install -g svg2png
+3. 命令提示符内输入：Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
+4. 命令提示符内输入：python docDownloader.py
 ```
