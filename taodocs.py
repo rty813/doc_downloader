@@ -3,7 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
-from selenium.common.exceptions import NoSuchElementException, JavascriptException
+from selenium.common.exceptions import NoSuchElementException, JavascriptException, StaleElementReferenceException
 
 import base64
 import time
@@ -48,7 +48,10 @@ def download(url):
             actions.move_to_element(elem_cont_button).perform()
             time.sleep(0.5)
             driver.execute_script("arguments[0].click();", elem_cont_button)
+            # break
         except NoSuchElementException:
+            break
+        except StaleElementReferenceException:
             break
         except JavascriptException:
             continue

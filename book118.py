@@ -26,10 +26,11 @@ def getHTML(url, byte=False):
 
 
 class Book118:
-    def __init__(self, pid, title):
+    def __init__(self, pid, title, url):
         ssl._create_default_https_context = ssl._create_unverified_context
         self.pid = str(pid)
         self.title = '原创力 ' + title.replace('-文档在线预览', '')
+        self.url = url
         self.pdfInfo = {}
         self.domain = ''
         self.index = -1
@@ -37,23 +38,27 @@ class Book118:
         self.imgList = []
 
     def getPDF(self):
-        print(self.title)
-        # 获取需要的信息
-        self.__getPdfInfo()
-        #　获得所有图片的地址
-        img = self.pdfInfo.get('Img')
-        imgUrl = img if img != None else ""
-        print('解析地址')
-        while self.index != self.total:
-            self.__getNextPage(
-                self.imgList[-1]
-                if len(self.imgList) != 0 else imgUrl)
-        self.pbar.close()
-        # 下载图片
-        self.__getIMG()
-        # 生成pdf
-        print('下载完毕，正在转码')
-        conpdf(f'output/{self.title}.pdf', f'temp/{self.title}/', '.jpg')
+        try:
+            print(self.title)
+            # 获取需要的信息
+            self.__getPdfInfo()
+            #　获得所有图片的地址
+            img = self.pdfInfo.get('Img')
+            imgUrl = img if img != None else ""
+            print('解析地址')
+            while self.index != self.total:
+                self.__getNextPage(
+                    self.imgList[-1]
+                    if len(self.imgList) != 0 else imgUrl)
+            self.pbar.close()
+            # 下载图片
+            self.__getIMG()
+            # 生成pdf
+            print('下载完毕，正在转码')
+            conpdf(f'output/{self.title}.pdf', f'temp/{self.title}/', '.jpg')
+        except Exception:
+            import book118_PPT
+            book118_PPT.download(self.url)
 
     def __getPdfInfo(self):
         url = makeURL('https://max.book118.com/index.php?',
@@ -71,6 +76,8 @@ class Book118:
             r'<input type="hidden" id="(.*?)" value="(.*?)".*?/>', rawHTML)
         for lst in res:
             self.pdfInfo[lst[0]] = lst[1]
+        for info in self.pdfInfo.items():
+            print(info)
 
     def __getNextPage(self, imgUrl):
         url = makeURL('https://' + self.domain + '.book118.com/PW/GetPage/?', {

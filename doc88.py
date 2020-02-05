@@ -72,7 +72,9 @@ def download(url):
 
         # Check loading status
         while(len(driver.find_element_by_id(pagepb_id).get_attribute('innerHTML')) != 0):
-            time.sleep(0.5)
+            time.sleep(1)
+            # print(driver.find_element_by_id(
+            #     pagepb_id).get_attribute('innerHTML'))
 
         js_cmd = "var canvas = document.getElementById('{}');".format(canvas_id) + \
             "return canvas.toDataURL();"

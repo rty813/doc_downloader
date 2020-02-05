@@ -35,7 +35,7 @@ def main():
             html = BeautifulSoup(urllib.request.urlopen(
                 url).read(), features='lxml')
             title = html.title.string[:-4]
-            Book118(url.split('/')[-1].split('.')[0], title).getPDF()
+            Book118(url.split('/')[-1].split('.')[0], title, url).getPDF()
         elif 'taodocs' in url:
             # 淘豆网
             import taodocs

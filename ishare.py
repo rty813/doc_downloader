@@ -80,6 +80,7 @@ def download(url):
             html = requests.get(imgUrl).content
             with open(f'./temp/{title}/{title}.svg', 'wb') as svgFile:
                 svgFile.write(html)
+                svgFile.flush()
                 os.system(
                     f'svg2png "./temp/{title}/{title}.svg" -o "./temp/{title}/{title}.png" -w 1500')
                 im = Image.open(f'./temp/{title}/{title}.png')
