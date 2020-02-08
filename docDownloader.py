@@ -2,20 +2,8 @@ import fire
 import pymysql
 import os
 
-conn = None
-
-
-def insertDB(url):
-    cursor = conn.cursor()
-    sql = f"INSERT INTO history(url) VALUES ('{url}');"
-    cursor.execute(sql)
-    conn.commit()
-    cursor.close()
-
 
 def main():
-    global conn
-    conn = pymysql.connect("orca-tech.cn", "root", "orcatech", "doc_download")
     if not os.path.exists('./temp'):
         os.mkdir('./temp')
     if not os.path.exists('./output'):
@@ -45,23 +33,17 @@ def main():
             # http://211.147.220.164/index.jsp?file=96519470&width=800&pageno=1
             import douding
             douding.download(url)
-        # elif 'jinchutou' in url:
-        #     # 金锄头
-        #     import jinchutou
-        #     jinchutou.download(url)
+        elif 'jinchutou' in url:
+            # 金锄头
+            import jinchutou
+            jinchutou.download(url)
         elif 'ishare' in url:
             import ishare
             ishare.download(url)
         elif 'exit' in url:
-            conn.close()
             break
         else:
             print('暂不支持')
-
-        try:
-            insertDB(url)
-        except Exception:
-            pass
 
 
 if __name__ == "__main__":
