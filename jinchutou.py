@@ -17,10 +17,8 @@ from img2pdf import conpdf
 def download(url):
     option = webdriver.ChromeOptions()
     option.add_argument('--headless')
-    option.add_argument('--no-sandbox')
     option.add_argument('log-level=3')
-    driver = webdriver.Chrome(
-        executable_path='./chromedriver', chrome_options=option)
+    driver = webdriver.Chrome(chrome_options=option)
 
     title = "output"
     try:
@@ -70,9 +68,8 @@ def download(url):
             with open(f"./temp/{title}/{pages}.gif", "wb") as fh:
                 fh.write(res.content)
         except Exception as e:
-            print("下载失败！\n%r" % e)
-            driver.quit()
-            return
+            print("下载失败，可能由于文档为收费预览文档。错误信息：\n%r" % e)
+            break
     driver.quit()
     print('下载完毕，正在转码')
     conpdf(f'output/{title}.pdf', f'temp/{title}', '.gif')

@@ -18,10 +18,8 @@ import shutil
 def download(url):
     option = webdriver.ChromeOptions()
     option.add_argument('headless')
-    option.add_argument('--no-sandbox')
     option.add_argument('log-level=3')
-    driver = webdriver.Chrome(
-        executable_path='./chromedriver', chrome_options=option)
+    driver = webdriver.Chrome(chrome_options=option)
 
     title = "output"
     try:

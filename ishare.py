@@ -20,10 +20,8 @@ import shutil
 def download(url):
     option = webdriver.ChromeOptions()
     option.add_argument('headless')
-    option.add_argument('--no-sandbox')
     option.add_argument('log-level=3')
-    driver = webdriver.Chrome(
-        executable_path='./chromedriver', chrome_options=option)
+    driver = webdriver.Chrome(chrome_options=option)
 
     title = "output"
     try:
@@ -79,17 +77,14 @@ def download(url):
             imgUrl = imgs[pages].find_element_by_tag_name(
                 'embed').get_attribute('src')
             html = requests.get(imgUrl).content
-            with open(f'./temp/{title}/{title}.svg', 'wb') as svgFile:
+            with open(f'./temp/{title}/{pages}.svg', 'wb') as svgFile:
                 svgFile.write(html)
                 svgFile.flush()
+                print(f'rsvg "./temp/{title}/{pages}.svg" "./temp/{title}/{pages}.png" -w 1500 -b white -f png')
                 os.system(
-                    f'svg2png "./temp/{title}/{title}.svg" -o "./temp/{title}/{title}.png" -w 1500')
-                im = Image.open(f'./temp/{title}/{title}.png')
-                bg = Image.new('RGB', im.size, (255, 255, 255))
-                bg.paste(im, im)
-                bg.save(f'./temp/{title}/{pages}.jpg')
-                os.remove(f'./temp/{title}/{title}.png')
-            os.remove(f'./temp/{title}/{title}.svg')
+                    f'rsvg "./temp/{title}/{pages}.svg" "./temp/{title}/{pages}.png" -w 1500 -b white -f png')
+            os.remove(f'./temp/{title}/{pages}.svg')
+            extension = '.png'
         except NoSuchElementException:
             # 图片格式
             while True:
@@ -105,11 +100,12 @@ def download(url):
                     actions.move_to_element(imgs[pages]).perform()
                     time.sleep(1)
                     driver.execute_script("window.scrollBy(0,10000)")
+            extension = '.jpg'
 
     driver.quit()
     print('下载完毕，正在转码')
-    conpdf(f'output/{title}.pdf', f'temp/{title}', '.jpg', True)
+    conpdf(f'output/{title}.pdf', f'temp/{title}', extension, True)
 
 
 if __name__ == "__main__":
-    download("http://ishare.iask.sina.com.cn/f/CSBjG4CX6D.html")
+    download("http://ishare.iask.sina.com.cn/f/8ACFfgB42IQ.html")
