@@ -7,3 +7,4 @@ __pycache__/
 *.log
 book118/out/
 *.pdf
+*.spec

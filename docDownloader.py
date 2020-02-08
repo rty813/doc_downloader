@@ -1,5 +1,4 @@
 import fire
-import pymysql
 import os
 
 
