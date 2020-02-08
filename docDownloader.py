@@ -1,7 +1,6 @@
 import fire
 import os
 
-
 def main():
     if not os.path.exists('./temp'):
         os.mkdir('./temp')
@@ -24,7 +23,6 @@ def main():
             taodocs.download(url)
         elif 'docin' in url:
             # 豆丁
-            # http://211.147.220.164/index.jsp?file=96519470&width=800&pageno=1
             import douding
             douding.download(url)
         elif 'jinchutou' in url:
@@ -38,7 +36,6 @@ def main():
             break
         else:
             print('暂不支持')
-
 
 if __name__ == "__main__":
     fire.Fire(main)
