@@ -16,13 +16,8 @@ def main():
             doc88.download(url)
         elif 'book118' in url:
             # 原创力
-            from book118 import Book118
-            from bs4 import BeautifulSoup
-            import urllib
-            html = BeautifulSoup(urllib.request.urlopen(
-                url).read(), features='lxml')
-            title = html.title.string[:-4]
-            Book118(url.split('/')[-1].split('.')[0], title, url).getPDF()
+            import book118
+            book118.download(url)
         elif 'taodocs' in url:
             # 淘豆网
             import taodocs

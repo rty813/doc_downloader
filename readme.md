@@ -3,6 +3,8 @@
 
 其中，由于新浪爱问网站用的都是svg格式的文件，将其转换成图片格式需要调用第三方库。Windows下可用svg2png库，Linux下可使用rsvg库。当然，在windows上面也可以安装rsvg库，需要下载CRAN，利用CRAN安装rsvg，实现svg的转换。
 
+### 本项目还提供了一个简易的在线下载网页，[点击进入](http://jdoufu.xyz/)
+
 ## rsvg库安装方法
 Binary packages for __OS-X__ or __Windows__ can be installed directly from CRAN:
 
