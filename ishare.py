@@ -21,7 +21,7 @@ def download(url):
     option = webdriver.ChromeOptions()
     option.add_argument('headless')
     option.add_argument('log-level=3')
-    driver = webdriver.Chrome(chrome_options=option)
+    driver = webdriver.Chrome(options=option)
 
     title = "output"
     try:
@@ -80,7 +80,8 @@ def download(url):
             with open(f'./temp/{title}/{pages}.svg', 'wb') as svgFile:
                 svgFile.write(html)
                 svgFile.flush()
-                print(f'rsvg "./temp/{title}/{pages}.svg" "./temp/{title}/{pages}.png" -w 1500 -b white -f png')
+                print(
+                    f'rsvg "./temp/{title}/{pages}.svg" "./temp/{title}/{pages}.png" -w 1500 -b white -f png')
                 os.system(
                     f'rsvg "./temp/{title}/{pages}.svg" "./temp/{title}/{pages}.png" -w 1500 -b white -f png')
             os.remove(f'./temp/{title}/{pages}.svg')

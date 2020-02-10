@@ -17,7 +17,7 @@ from img2pdf import conpdf
 
 def download(url):
     option = webdriver.ChromeOptions()
-    # option.add_argument('headless')
+    option.add_argument('headless')
     option.add_argument('log-level=3')
     driver = webdriver.Chrome(
         executable_path='.//chromedriver', options=option)
