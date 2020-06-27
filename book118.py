@@ -82,6 +82,11 @@ def download(url):
             actions = ActionChains(driver)
             actions.move_to_element(elem).perform()
             img = elem.find_element_by_tag_name('img')
+            count = 0
+            while count < 10 and img.get_attribute('data-src') == None and img.get_attribute('src') == None:
+                count += 1
+                time.sleep(1)
+
             img_url = img.get_attribute('src')
             if img_url is None or not 'http' in img_url:
                 img_url = "http:" + img.get_attribute('data-src')
