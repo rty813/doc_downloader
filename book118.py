@@ -39,8 +39,12 @@ def download(url):
         return
     time.sleep(2)
 
-    driver.find_element_by_id("agree_full").click()
-    time.sleep(1)
+    try:
+        driver.find_element_by_id("agree_full").click()
+    except:
+        driver.find_elements_by_class_name('big')[0].click()
+    finally:
+        time.sleep(1)
 
     driver.get(driver.find_element_by_id(
         "layer_new_view_iframe").get_attribute("src"))
@@ -95,4 +99,4 @@ def download(url):
 
 
 if __name__ == '__main__':
-    download("https://max.book118.com/html/2020/0203/5123223334002220.shtm")
+    download("https://max.book118.com/html/2017/1206/143048522.shtm")
