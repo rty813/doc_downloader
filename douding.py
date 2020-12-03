@@ -10,6 +10,8 @@ import requests
 
 def download(url):
     text = requests.get(url).text
+    pos = text.index('flash_param_hzq')
+    sid = text[pos + 17:].split('"')[0]
     pos = text.index('allPage:')
     pages = int(text[pos + 8: pos + 12].split(',')[0])
     id = url.split('.')[-2].split('-')[-1]
@@ -22,7 +24,7 @@ def download(url):
     os.makedirs(f'./temp/{title}')
 
     for i in trange(pages):
-        url = f"http://211.147.220.164/index.jsp?file={id}&width=1600&pageno={i + 1}"
+        url = f"https://docimg1.docin.com/docinpic.jsp?file={id}&width=1600&pageno={i + 1}&sid={sid}"
         res = requests.get(url)
         with open(f'./temp/{title}/{i+1}.jpg', 'wb') as f:
             f.write(res.content)
