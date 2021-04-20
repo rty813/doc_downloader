@@ -33,20 +33,10 @@ def download(url):
     print(f'原创力: 《{title}》')
     time.sleep(5)
 
-    try:
-        # 展开全部
-        elem_cont_button = driver.find_element_by_id("agree_full")
-        driver.execute_script(
-            "arguments[0].scrollIntoView(true);", elem_cont_button)
-        actions = ActionChains(driver)
-        actions.move_to_element(elem_cont_button).perform()
-        time.sleep(0.5)
-        elem_cont_button.click()
-        # time.sleep(10)
-    except NoSuchElementException:
-        pass
+    driver.find_element_by_id('btn_preview_remain').click()
 
-    frame = driver.find_element_by_id('layer_view_iframe')
+    time.sleep(2)
+    frame = driver.find_elements_by_class_name('preview-iframe')[0]
     src = frame.get_attribute('src')
     print(src)
 
