@@ -42,4 +42,4 @@ brew install librsvg
 pip install -r requirements.txt
 python docDownloader.py
 ```
-若使用报错，应先检查chromedriver版本与chrome版本是否兼容。若不兼容，则只需将项目中的chromedriver.exe替换为兼容的版本即可。
+若使用报错，应先检查chromedriver版本与chrome版本是否兼容。若不兼容，则只需将项目中的chromedriver.exe替换为兼容的版本即可。附[chromedriver下载地址](https://chromedriver.chromium.org/downloads)
