@@ -42,32 +42,39 @@ def download(url):
     try:
         driver.find_element_by_id("agree_full").click()
     except:
-        driver.find_elements_by_class_name('big')[0].click()
+        try:
+            driver.find_elements_by_class_name('big')[0].click()
+        except:
+            pass
     finally:
         time.sleep(1)
 
-    driver.get(driver.find_element_by_id(
-        "layer_new_view_iframe").get_attribute("src"))
-    time.sleep(3)
+    # driver.get(driver.find_element_by_id(
+    #     "layer_new_view_iframe").get_attribute("src"))
+    # time.sleep(3)
 
     while True:
         try:
             # 展开全部
-            elem_cont_button = driver.find_element_by_id("btn_read")
+            elem_cont_button = driver.find_element_by_id("btn_preview_remain")
             driver.execute_script(
                 "arguments[0].scrollIntoView(true);", elem_cont_button)
             actions = ActionChains(driver)
             actions.move_to_element(elem_cont_button).perform()
+            driver.execute_script("window.scrollBy(0, -100)")
             time.sleep(2)
             elem_cont_button.click()
         except NoSuchElementException:
             break
         except Exception:
-            continue
+            import traceback
+            traceback.print_exc()
+        finally:
+            time.sleep(1)
 
     # 获取页数
     num_of_pages = driver.find_element_by_class_name(
-        'page-counts').get_attribute('innerHTML')
+        'counts').get_attribute('innerHTML')
     num_of_pages = int(num_of_pages.split(' ')[-1])
 
     if os.path.exists(f'./temp/{title}'):
