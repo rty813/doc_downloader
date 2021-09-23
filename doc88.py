@@ -13,14 +13,12 @@ import shutil
 from tqdm import trange
 from img2pdf import conpdf
 
-
 def download(url):
     option = webdriver.ChromeOptions()
-    # option.add_argument('headless')
+    option.add_argument('headless')
     option.add_argument('log-level=3')
-    driver = webdriver.Chrome(
-        executable_path='.//chromedriver', chrome_options=option)
-
+    option.add_argument("--window-size=1920,1080")
+    driver = webdriver.Chrome(executable_path='.//chromedriver', chrome_options=option)
     title = "output"
     try:
         driver.set_page_load_timeout(15)
@@ -35,8 +33,7 @@ def download(url):
     try:
         # 展开全部
         elem_cont_button = driver.find_element_by_id("continueButton")
-        driver.execute_script(
-            "arguments[0].scrollIntoView(true);", elem_cont_button)
+        driver.execute_script("arguments[0].scrollIntoView(true);", elem_cont_button)
         actions = ActionChains(driver)
         actions.move_to_element(elem_cont_button).perform()
         time.sleep(0.5)
@@ -45,9 +42,10 @@ def download(url):
         pass
 
     # 获取页数
-    num_of_pages = driver.find_element_by_id('readshop').find_element_by_class_name(
-        'mainpart').find_element_by_class_name('shop3').find_element_by_class_name('text').get_attribute('innerHTML')
+    num_of_pages = driver.find_element_by_id('toolbar').find_element_by_id('item-page-panel').\
+        find_element_by_class_name('text').text
     num_of_pages = int(num_of_pages.split(' ')[-1])
+    # print("页数：",num_of_pages)
 
     for i in range(5):
         # 缩放
@@ -58,28 +56,26 @@ def download(url):
         shutil.rmtree(f'./temp/{title}')
     os.makedirs(f'./temp/{title}')
 
+
     for pages in trange(num_of_pages):
         time.sleep(0.5)
+        canvas_id = "outer_page_" + str(pages + 1)
+        pagepb_id = "page_" + str(pages + 1)
 
-        canvas_id = "page_" + str(pages + 1)
-        pagepb_id = "pagepb_" + str(pages + 1)
+        try:
+            element = driver.find_element_by_id(canvas_id)
+        except:
+            time.sleep(1)
+            element = driver.find_element_by_id(canvas_id)
 
-        element = driver.find_element_by_id(canvas_id)
         driver.execute_script("arguments[0].scrollIntoView(true);", element)
         actions = ActionChains(driver)
         actions.move_to_element(element).perform()
         time.sleep(0.5)
-
-        # Check loading status
-        while(len(driver.find_element_by_id(pagepb_id).get_attribute('innerHTML')) != 0):
-            time.sleep(1)
-            # print(driver.find_element_by_id(
-            #     pagepb_id).get_attribute('innerHTML'))
-
-        js_cmd = "var canvas = document.getElementById('{}');".format(canvas_id) + \
+        # 执行js代码
+        js_cmd = "var canvas = document.getElementById('{}');".format(pagepb_id) + \
             "return canvas.toDataURL();"
         img_data = driver.execute_script(js_cmd)
-
         img_data = (img_data[22:]).encode()
 
         with open(f"./temp/{title}/{pages}.png", "wb") as fh:
