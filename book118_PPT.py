@@ -75,9 +75,9 @@ def download(url):
 
         # 不同的保存策略
         if saveEveryAction:
-            imageIndex = pageIndex  # 每页只保留一页-->同一页，使用相同名称保存，文件会覆盖，则最后保留的就只有一页
-        else:
             imageIndex += 1  # 每一个动画都保存一页
+        else:
+            imageIndex = pageIndex  # 每页只保留一页-->同一页，使用相同名称保存，文件会覆盖，则最后保留的就只有一页
 
         driver.save_screenshot(f'temp/{title}/{imageIndex}.png')
         driver.find_element_by_class_name('btmRight').click()  # 点击“下一个动画”按钮
