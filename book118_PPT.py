@@ -89,4 +89,4 @@ def download(url):
 
 
 if __name__ == '__main__':
-    download("https://max.book118.com/html/2018/1208/7032001121001163.shtm")
+    download("https://max.book118.com/html/2021/1211/7136026114004063.shtm")
