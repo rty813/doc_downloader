@@ -41,33 +41,52 @@ def download(url):
     print(src)
 
     driver.get(src)
-    time.sleep(5)
+    time.sleep(3)
+
+    driver.maximize_window()  # 最大化当前页
+    time.sleep(3)
+
+    if not os.path.exists('./output'):
+        os.mkdir('./output')
 
     if os.path.exists(f'./temp/{title}'):
         shutil.rmtree(f'./temp/{title}')
     os.makedirs(f'./temp/{title}')
 
-    pageCount = int(driver.find_element_by_id(
-        'PageCount').get_attribute('innerHTML'))
-    for i in trange(pageCount):
-        driver.save_screenshot(f'temp/{title}/capture.png')
-        page = driver.find_element_by_id('ppt')
+    pageCount = int(driver.find_element_by_id('PageCount').get_attribute('innerHTML'))
+    pageIndex = 0  # 当前页数
+    imageIndex = 0  # 保存图片用的索引
 
-        left = page.location['x']
-        top = page.location['y']
-        right = left + page.size['width']
-        bottom = top + page.size['height'] - 35
+    saveEveryAction = False  # TODO 是否需要保存每一个动画
+    waitTime = 2  # 每页加载时长 TODO 如果截图时，动画没有完成，则放宽此时间
 
-        im = Image.open(f'temp/{title}/capture.png')
-        im = im.crop((left, top, right, bottom))  # 元素裁剪
-        im.save(f'temp/{title}/{i}.png')  # 元素截图
-        driver.find_element_by_id('pageNext').click()
-        time.sleep(1)  # 防止还没加载出来
-    os.remove(f'./temp/{title}/capture.png')
+    # 修改窗口为ptt比例，这样就不用截图后裁剪了
+    window_size = driver.get_window_size()  # 浏览器窗口的大小
+    html = driver.find_element_by_tag_name('html')  # PPT底部，到浏览器顶部的大小
+    page = driver.find_element_by_id('ppt')  # PPT显示部分的大小
+
+    diff_height = window_size['height'] - html.size['height'] * 2 + page.size['height']  # 浏览器高度上，额外的部分（标签栏）
+    driver.set_window_size(page.size['width'], page.size['height'] + diff_height)
+
+    # 如何处理动画：使用“下一个动画”按钮，点击一次，就截图。然后根据 不同图片索引 保存文件
+
+    while pageIndex < pageCount:
+        pageIndex = int(driver.find_element_by_id('PageIndex').get_attribute('innerHTML'))
+
+        # 不同的保存策略
+        if saveEveryAction:
+            imageIndex += 1  # 每一个动画都保存一页
+        else:
+            imageIndex = pageIndex  # 每页只保留一页-->同一页，使用相同名称保存，文件会覆盖，则最后保留的就只有一页
+
+        driver.save_screenshot(f'temp/{title}/{imageIndex}.png')
+        driver.find_element_by_class_name('btmRight').click()  # 点击“下一个动画”按钮
+        time.sleep(waitTime)
+
     driver.quit()
     print('下载完毕，正在转码')
     conpdf(f'output/{title}.pdf', f'temp/{title}', '.png')
 
 
 if __name__ == '__main__':
-    download("https://max.book118.com/html/2019/1002/8052020057002053.shtm")
+    download("https://max.book118.com/html/2021/1211/7136026114004063.shtm")
