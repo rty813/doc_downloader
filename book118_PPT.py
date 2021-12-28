@@ -54,10 +54,11 @@ def download(url):
     os.makedirs(f'./temp/{title}')
 
     pageCount = int(driver.find_element_by_id('PageCount').get_attribute('innerHTML'))
-
     pageIndex = 0  # 当前页数
     imageIndex = 0  # 保存图片用的索引
+
     saveEveryAction = False  # TODO 是否需要保存每一个动画
+    waitTime = 2  # 每页加载时长 TODO 如果截图时，动画没有完成，则放宽此时间
 
     # 修改窗口为ptt比例，这样就不用截图后裁剪了
     window_size = driver.get_window_size()  # 浏览器窗口的大小
@@ -71,7 +72,6 @@ def download(url):
 
     while pageIndex < pageCount:
         pageIndex = int(driver.find_element_by_id('PageIndex').get_attribute('innerHTML'))
-        print(f'循环，当前页：{pageIndex}，当前图片索引：{imageIndex}')
 
         # 不同的保存策略
         if saveEveryAction:
@@ -81,7 +81,7 @@ def download(url):
 
         driver.save_screenshot(f'temp/{title}/{imageIndex}.png')
         driver.find_element_by_class_name('btmRight').click()  # 点击“下一个动画”按钮
-        time.sleep(2)  # 用于加载。TODO 如果截图时，动画没有完成，则放宽此时间
+        time.sleep(waitTime)
 
     driver.quit()
     print('下载完毕，正在转码')
@@ -89,4 +89,4 @@ def download(url):
 
 
 if __name__ == '__main__':
-    download("https://max.book118.com/html/2021/1211/7136026114004063.shtm")
+    download("https://max.book118.com/html/2018/1208/7032001121001163.shtm")
