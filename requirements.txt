@@ -1,5 +1,5 @@
 selenium==3.141.0
-reportlab==3.5.53
+reportlab==3.5.55
 requests==2.23.0
 tqdm==4.46.0
 fire==0.3.1
